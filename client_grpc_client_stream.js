@@ -68,12 +68,14 @@ var buffer = new Buffer.alloc(1024);
 
 
   try {
-    const data = fs.readFileSync(filePath).toString('hex');
+    const data = fs.readFileSync(filePath);
     // let call = client.UploadFile({filename: "testing", payload:data})
     let call = client.UploadFile(function (error, response) {
       console.log(response);
     });
-    call.write({filename: "testing", payload:data});
+   
+      call.write({filename: "testing", payload:data});
+      call.write({filename: "testing", payload:''});
   // console.log(buffer.toString('utf8', 0, num));
     call.end();
   } catch (err) {

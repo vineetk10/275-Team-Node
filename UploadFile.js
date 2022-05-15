@@ -1,5 +1,6 @@
 const fs = require('fs');
-
+// const Blob = require('buffer')
+const util = require('util')
 function UploadFile(call, callback) {
     
     console.log("In upload server");
@@ -8,10 +9,20 @@ function UploadFile(call, callback) {
     call.on('data',function(byteStream){
         let fileName = byteStream.filename;
         let bytesInput = byteStream.payload;
+       
         if(bytesInput.length==0){
             console.log("Write into file");
-            var blob = new Blob(fileBytes[fileName], {type: "application/pdf"});
-            fs.createWriteStream("C:/Users/Checkout/Documents/GRPC-JAVASCRIPT").write(blob);
+            try{
+                // fs.writeFile("C:/Users/Checkout/Documents/GRPC-JAVASCRIPT/testing.pdf", new Buffer(fileBytes[fileName]));
+                const buffer = Buffer.from(fileBytes[fileName]);
+                fs.writeFile("C:/Users/Checkout/Documents/GRPC-JAVASCRIPT/sample.pdf", buffer,function(err, result) {
+                    if(err) console.log('error', err);
+                  });
+            }
+            catch(err)
+            {
+                console.log(err);
+            }
         }
         else{
             if(!(fileName in dict))
@@ -21,9 +32,9 @@ function UploadFile(call, callback) {
             else
             {
                 fileBytes[fileName] = fileBytes[fileName] + bytesInput;
+                console.log("Bye");
             }
         }
-
        
     });
     call.on('end',function(){
