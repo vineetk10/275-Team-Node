@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-function UploadFile(call) {
+function UploadFile(call, callback) {
     
     console.log("In upload server");
     const fileBytes = [];
