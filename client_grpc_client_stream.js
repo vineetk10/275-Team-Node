@@ -33,42 +33,49 @@ function main() {
 var buffer = new Buffer.alloc(1024);
   let filePath = "C:/Users/Checkout/Downloads/sample.pdf";
 
-  fs.open(filePath, 'r+', function (err, fd) {
-    if (err) {
-        return console.error(err);
-    }
+
+      // let call = client.UploadFile({filename: "testing"})
+      
+  // fs.open(filePath, 'r+', function (err, fd) {
+  //   if (err) {
+  //       return console.error(err);
+  //   }
   
-    console.log("Reading the file");
+  //   console.log("Reading the file");
   
-    fs.read(fd, buffer, 0, buffer.length,
-        0, function (err, bytes) {
-            if (err) {
-                console.log(err);
-            }
+//     fs.read(fd, buffer, 0, buffer.length,
+//         0, function (err, bytes) {
+//             if (err) {
+//                 console.log(err);
+//             }
   
-            // if (bytes > 0) {
-            //     console.log(buffer.
-            //         slice(0, bytes).toString());
-            // }
-            console.log(bytes + " bytes read");
-            let call = client.UploadFile({filename: "testing", payload:buffer})
-            // Close the opened file.
-            fs.close(fd, function (err) {
-                if (err) {
-                    console.log(err);
-                }
+//             // if (bytes > 0) {
+//             //     console.log(buffer.
+//             //         slice(0, bytes).toString());
+//             // }
+//             console.log(bytes + " bytes read");
+//             let call = client.UploadFile({filename: "testing", payload:buffer})
+//             // Close the opened file.
+//             fs.close(fd, function (err) {
+//                 if (err) {
+//                     console.log(err);
+//                 }
   
-                console.log("File closed successfully");
-            });
-        });
-});
+//                 console.log("File closed successfully");
+//             });
+//         });
+// });
 
 
   try {
     const data = fs.readFileSync(filePath).toString('hex');
-    let call = client.UploadFile({filename: "testing", payload:data})
+    // let call = client.UploadFile({filename: "testing", payload:data})
+    let call = client.UploadFile(function (error, response) {
+      console.log(response);
+    });
+    call.write({filename: "testing", payload:data});
+  // console.log(buffer.toString('utf8', 0, num));
     call.end();
-    console.log(data);
   } catch (err) {
     console.error(err);
   }
