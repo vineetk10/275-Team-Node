@@ -29,11 +29,13 @@ let node_comm_proto = grpc.loadPackageDefinition(packageDefinition_node);
 let { UploadFile } = require('./UploadFile.js');
 let { CreateReplica } = require('./CreateReplica.js');
 let { ReplicateFile } = require('./ReplicateFile.js');
+let { DownloadFile } = require('./DownloadFile.js');
 
 function main() {
   let server = new grpc.Server();
   server.addService(client_comm_proto.client.Streaming.service, 
-    {UploadFile: UploadFile }
+    {UploadFile: UploadFile,
+      DownloadFile: DownloadFile }
   );
   server.addService(node_comm_proto.stream.NodeReplication.service, 
     {CreateReplica: CreateReplica,

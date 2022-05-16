@@ -8,7 +8,7 @@ package client;
 service Streaming {
 
   rpc UploadFile (stream UploadFileRequest) returns (UploadFileReply) {}
-  // rpc DownloadFile (DownloadFileRequest) returns (stream DownloadFileReply) {}
+  rpc DownloadFile (DownloadFileRequest) returns (stream DownloadFileReply) {}
 }
 
 // The request message containing the user's name.
@@ -31,4 +31,5 @@ message DownloadFileRequest {
 // The response message containing the greetings
 message DownloadFileReply {
   bytes payload = 2;
+  string error = 1;
 }
