@@ -39,8 +39,8 @@ let master_comm_proto = grpc.loadPackageDefinition(packageDefinition1).stream;
 let node_comm_proto = grpc.loadPackageDefinition(packageDefinition_node).stream;
 
 function main() {
-  // let client = new client_comm_proto.Streaming('localhost:4500',
-  //                                       grpc.credentials.createInsecure());
+  let client = new client_comm_proto.Streaming('localhost:4500',
+                                        grpc.credentials.createInsecure());
   let client1 = new master_comm_proto.Replication('localhost:4502',
   grpc.credentials.createInsecure());    
 
@@ -53,54 +53,40 @@ function main() {
 
   try {
     const data = fs.readFileSync(filePath);
-    // let call = client.UploadFile(function (error, response) {
-    //   console.log(response);
-    // });
-   
-    //   call.write({filename: "sample", payload:data});
-    //   call.write({filename: "sample", payload:''});
-    //   call.end();
-
-      // let call2 = client1.GetNodeIpsForReplication({filename: "sample"},function (error, response) {
-      //   console.log("Response is "+response.nodeips);
-      //   console.log("Error is "+error);
-      // });
-      // call2.on('data',function(response){
-      //   console.log(response.message);
-      // });
-    
-      // call2.on('end',function(error, response){
-      //   console.log(response);
-      //   console.log("Error is "+error);
-      // });
-
-      // call2.end();
-  } catch (err) {
-    console.error(err);
-  }
-
-  try {
-    const data = fs.readFileSync(filePath);
-    let call = client_node.CreateReplica(function (error, response) {
+    let call = client.UploadFile(function (error, response) {
       console.log(response);
     });
-    call.write({filename: "testing", payload:data});
-    call.write({filename: "testing", payload:''});
-    call.end();
+   
+      call.write({filename: "sample", payload:data});
+      call.write({filename: "sample", payload:''});
+      call.end();
+
   } catch (err) {
     console.error(err);
   }
 
-  try {
-    let call = client_node.ReplicateFile({filename: "sample", nodeips:''},function (error, response) {
-      console.log("Response is "+JSON.stringify(response.status));
-      console.log("Error is "+error);
-    });
-    call.on('data',function(error, response){
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  // try {
+  //   const data = fs.readFileSync(filePath);
+  //   let call = client_node.CreateReplica(function (error, response) {
+  //     console.log(response);
+  //   });
+  //   call.write({filename: "testing", payload:data});
+  //   call.write({filename: "testing", payload:''});
+  //   call.end();
+  // } catch (err) {
+  //   console.error(err);
+  // }
+
+  // try {
+  //   let call = client_node.ReplicateFile({filename: "sample", nodeips:''},function (error, response) {
+  //     console.log("Response is "+JSON.stringify(response.status));
+  //     console.log("Error is "+error);
+  //   });
+  //   call.on('data',function(error, response){
+  //   });
+  // } catch (err) {
+  //   console.error(err);
+  // }
 
 }
 
