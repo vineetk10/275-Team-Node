@@ -9,9 +9,9 @@ function GetNodeIpsForReplication(call, callback)
     //         nodeips: ["localhost:4500"]
     //     })
     // })
-    callback(null,{
-                nodeips: ["localhost:4500"]
-            })
+    let nodeips = ["localhost:4500", "localhost:4501"]
+    console.log(nodeips[1]);
+    callback(null,nodeips)
     // call2.write({ nodeips: ["localhost:4502"] });
     // call2.end();
     // return {nodeips: ["localhost:4500"]};
