@@ -1,0 +1,37 @@
+const PROTO_PATH_GATEWAY = './proto/gateway-comm.proto';
+
+const grpc = require('grpc');
+const protoLoader = require('@grpc/proto-loader');
+
+let packageDefinition_gateway = protoLoader.loadSync(
+    PROTO_PATH_GATEWAY,
+    {keepCase: true,
+      longs: String,
+      enums: String,
+      defaults: true,
+      oneofs: true
+});
+
+let gateway_comm_proto = grpc.loadPackageDefinition(packageDefinition_gateway);
+
+function main() {
+    let server = new grpc.Server();
+    server.addService(gateway_comm_proto.stream.Authenticate.service,
+        {
+            Register: (_, callback) => {
+                callback(null, {masterip: "masterIP:4000"})
+              },
+            
+            Login: (_, callback) => {
+            callback(null, {
+                msg: "message",
+                token: "token123445"
+              })
+            }
+        }
+    );
+    server.bind('0.0.0.0:4500', grpc.ServerCredentials.createInsecure());
+    server.start();
+}
+  
+main();
