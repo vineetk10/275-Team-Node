@@ -14,19 +14,18 @@ let packageDefinition_gateway = protoLoader.loadSync(
 
 let gateway_comm_proto = grpc.loadPackageDefinition(packageDefinition_gateway);
 
+let { RegisterNodeFile } = require('./RegisterNodeFile.js');
+
 function main() {
     let server = new grpc.Server();
     server.addService(gateway_comm_proto.stream.Authenticate.service,
         {
-            Register: (_, callback) => {
-                callback(null, {masterip: "masterIP:4000"})
-              },
+            Register: RegisterNodeFile,
             
-            Login: (_, callback) => {
-            callback(null, {
-                msg: "message",
-                token: "token123445"
-              })
+            Login: (call, callback) => {
+              callback(null, {masterip: "masterIP:4000",
+              message: "ERROR",
+              token: "1234"})
             }
         }
     );

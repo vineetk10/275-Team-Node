@@ -3,15 +3,11 @@ const PROTO_PATH_GATEWAY = './proto/gateway-comm.proto';
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 const _ = require('lodash');
-const redis = require('redis');
 var ip = require("ip");
 
-// const REDIS_PORT = process.env.REDIS_PORT || 6379;
+var {redisClient} = require('./redisClient');
 
-// const redis_client = redis.createClient(REDIS_PORT);
-
-// // set data on redis
-// redis_client.setEx("token", 3600, "123456");
+redisClient.setEx("xx", 3600, "2525");
 
 
 let packageDefinition_gateway = protoLoader.loadSync(
@@ -25,41 +21,44 @@ let packageDefinition_gateway = protoLoader.loadSync(
 
 let gateway_comm_proto = grpc.loadPackageDefinition(packageDefinition_gateway).stream;  
                                          
-// function main() {
+function main() {
 
-//     let registrationClient = new gateway_comm_proto.Authenticate('localhost:4500',
-//                                          grpc.credentials.createInsecure());
+    let registrationClient = new gateway_comm_proto.Authenticate('localhost:4500',
+                                         grpc.credentials.createInsecure());
 
-//     var ipa = ip.address(); //our ip
+    var ipa = ip.address(); //our ip
 
-//     var registrationCreds = {
-//         name : "nodeJs_Node",
-//         password : "cmpe275",
-//     }
+    // client_ip is ip of application client or this client ?
+    var creds = {
+      ip: ipa,
+      password : "cmpe275",
+      type: "NODE"
+    }
 
-//     // client_ip is ip of application client or this client ?
-//     var loginCreds = {
-//       client_ip: "client ip",
-//       password : "cmpe275",
-//     }
-
-//     registrationClient.Register(registrationCreds, (error, response) => {
-//       if (!error){
-//         console.log(response.masterip);
-//       } else {
-//         console.error(error);
-//       }
-//     });
-    
-//     registrationClient.Login(loginCreds, (error, response) => {
-//       if (!error){
-//         console.log(response.msg);
-//         console.log(response.token);
-//       } else {
-//         console.error(error);
-//       }
-//     });
+    registrationClient.Login(creds, (error, response) => {
+      if (response.message != "ERROR"){
+        console.log("No error in login");
+        console.log(response.masterip);
+        console.log(response.message);
+        console.log(response.token);
+        redisClient.setEx("masterip", 3600, response.masterip);
+        redisClient.setEx("token", 3600, response.token);
+      } else {
+        registrationClient.Register(creds, (error, response) => {
+          if (!error){
+            console.log("error in login --> register");
+            console.log(response.masterip);
+            console.log(response.message);
+            console.log(response.token);
+            redisClient.setEx("masterip", 3600, response.masterip);
+            redisClient.setEx("token", 3600, response.token);
+          } else {
+            console.error(error);
+          }
+        });
+      }
+    });
                                          
-//   }
+  }
   
-// main();
+main();
