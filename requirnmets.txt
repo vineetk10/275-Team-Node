@@ -1,0 +1,16 @@
+
+#### Node
+
+* - Node registers onto the network by initially communicating with the gateway
+  - Node gets authenticated by the gateway and receives the IP address of the master node
+
+- Node accepts upload and download requests from the client → chunk
+
+- Node informs the master node when data is uploaded to it → grpc method?
+  - Node receives IP addresses of other nodes where data needs to be replicated -> node 
+replicates data based on this
+
+- Node must be able to receive a message from the master node about replicating data when 
+some other node fails
+
+  - Node will receive IP addresses of other nodes where data needs to be replicated -> node replicates data based on this

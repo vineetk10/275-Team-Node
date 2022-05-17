@@ -7,8 +7,6 @@ var ip = require("ip");
 
 var {redisClient} = require('./redisClient');
 
-redisClient.setEx("xx", 3600, "2525");
-
 
 let packageDefinition_gateway = protoLoader.loadSync(
     PROTO_PATH_GATEWAY,
@@ -41,8 +39,8 @@ function main() {
         console.log(response.masterip);
         console.log(response.message);
         console.log(response.token);
-        redisClient.setEx("masterip", 3600, response.masterip);
-        redisClient.setEx("token", 3600, response.token);
+        redisClient.setEx("masterip", 18000, response.masterip);
+        redisClient.setEx("token", 18000, response.token);
       } else {
         registrationClient.Register(creds, (error, response) => {
           if (!error){

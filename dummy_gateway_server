@@ -23,13 +23,16 @@ function main() {
             Register: RegisterNodeFile,
             
             Login: (call, callback) => {
-              callback(null, {masterip: "masterIP:4000",
-              message: "ERROR",
-              token: "1234"})
-            }
+              callback(null, {masterip: "masterIP:3000",
+              message: "SUCCESS",
+              token: "12"})
+            },
+            ValidateToken: (call, callback) => {
+                callback(null, {message: "INVALID"})
+              }
         }
     );
-    server.bind('0.0.0.0:4500', grpc.ServerCredentials.createInsecure());
+    server.bind('0.0.0.0:3000', grpc.ServerCredentials.createInsecure());
     server.start();
 }
   
