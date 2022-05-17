@@ -47,18 +47,12 @@ let { DownloadFile } = require('./DownloadFile.js');
 
 async function main() {
   let server = new grpc.Server();
-
-  server.addService(client_comm_proto.client.Streaming.service, 
-    {UploadFile: UploadFile,
-      DownloadFile: DownloadFile
-     }
-  ); 
+ 
   server.addService(node_comm_proto.stream.NodeReplication.service, 
-    {CreateReplica: CreateReplica,
-      ReplicateFile: ReplicateFile }
+    {CreateReplica: CreateReplica }
   );
   
-  server.bind('0.0.0.0:4500', grpc.ServerCredentials.createInsecure());
+  server.bind('0.0.0.0:8000', grpc.ServerCredentials.createInsecure());
   server.start();
 }
 
