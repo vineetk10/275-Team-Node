@@ -42,55 +42,8 @@ let gateway_comm_proto = grpc.loadPackageDefinition(packageDefinition_gateway).s
 
 // console.log("xxxxxx", gateway_comm_proto);
 
-async function login(gatewayClient) {
-
-  await new Promise((resolve,reject) => {
-    gatewayClient.Login({ip: ip.address(), password : "cmpe275", type: "NODE"}, (error, response) => {
-      if (error) {
-        reject(error)
-      }
-      console.log("No error in login");
-      console.log(response.masterip);
-      console.log(response.message);
-      console.log(response.token);
-      redisClient.setEx("masterip", 3600, response.masterip);
-      redisClient.setEx("token", 3600, response.token);
-      resolve(response);
-  });
-  })
-
-}
-
-
-async function isValidToken(gatewayClient) {
-
-    let storedToken = await redisClient.get('token');
-
-    if (!storedToken){
-        return false;
-    }
-    
-    validationReqParams = { client_ip: ip.address(),
-                      token: storedToken
-                    }
-    // console.log("======", validationReqParams);
-    
-    let res = await new Promise((resolve,reject) => {
-      gatewayClient.ValidateToken(validationReqParams, (error, response) => {
-        if (!error){
-          console.log("xxxxx", response.message);
-          if (response.message == "VALID"){
-            resolve({ isValid: true });
-          }else{
-            resolve({ isValid: false });
-          }
-        } else {
-          reject(error);
-        }
-      });
-    })
-  return res;
-}
+let {isValidToken} = require('./tokenValidation.js');
+let {login} = require('./login.js');
 
 let { UploadFile } = require('./UploadFile.js');
 let { CreateReplica } = require('./CreateReplica.js');
@@ -99,10 +52,7 @@ let { DownloadFile } = require('./DownloadFile.js');
 
 async function main() {
 
-  var gatewayClient = new gateway_comm_proto.Authenticate('localhost:3000',
-                                         grpc.credentials.createInsecure());
-
-  let validationResponseObject = await isValidToken(gatewayClient);
+  let validationResponseObject = await isValidToken();
 
   var validationResponse = validationResponseObject.isValid;
 
@@ -111,7 +61,7 @@ async function main() {
   let server = new grpc.Server();
 
   if (!validationResponse){
-    await login(gatewayClient);
+    await login();
     console.log("login function");
   }
 

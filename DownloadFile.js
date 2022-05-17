@@ -1,7 +1,21 @@
 const fs = require('fs');
 const util = require('util')
 
+let {isValidToken} = require('./tokenValidation.js');
+let {login} = require('./login.js');
+
 async function DownloadFile(call) {
+
+    let validationResponseObject = await isValidToken();
+
+    var validationResponse = validationResponseObject.isValid;
+
+    console.log("validationResponse  download file-->",validationResponse);
+
+    if (!validationResponse){
+        await login();
+        console.log("login function");
+    }
 
     var filePath = "/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/";
     try {
