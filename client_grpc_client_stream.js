@@ -48,7 +48,7 @@ function main() {
                                         grpc.credentials.createInsecure());
 
   var buffer = new Buffer.alloc(1024);
-  let filePath = "C:/Users/Checkout/Downloads/sample.pdf";
+  let filePath = "/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/sample.pdf";
   //let filePath = "C:/Users/alism/Desktop/Node/File/sample.pdf";
 
   try {

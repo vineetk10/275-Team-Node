@@ -32,9 +32,9 @@ function main() {
       console.log(errorResponse);
     } else {
       console.log(bufferResponse);
-      fs.writeFile("/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/sample65.pdf", bufferResponse,function(err, result) {
-        if(err) console.log('error', err);
-      });
+      // fs.writeFile("/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/sample65.pdf", bufferResponse,function(err, result) {
+      //   if(err) console.log('error', err);
+      // });
     }
 
     });
