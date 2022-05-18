@@ -52,12 +52,19 @@ function main() {
   //let filePath = "C:/Users/alism/Desktop/Node/File/sample.pdf";
 
   try {
+    let chunkSize = 4000;
     const data = fs.readFileSync(filePath);
     let call = client.UploadFile(function (error, response) {
       console.log(response);
     });
-   
-      call.write({filename: "sample.pdf", payload:data});
+   for(let i=0;(chunkSize*i)<data.length;i++)
+   {
+     if(((chunkSize*i)+chunkSize)<data.length)
+      call.write({filename: "sample.pdf", payload:data.slice((chunkSize*i), (chunkSize*i)+chunkSize)});
+    else
+      call.write({filename: "sample.pdf", payload:data.slice((chunkSize*i), data.length)});
+   }
+      
       call.write({filename: "sample.pdf", payload:''});
       call.end();
 

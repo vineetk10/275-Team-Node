@@ -88,20 +88,20 @@ async function UploadFile(call, callback) {
   grpc.credentials.createInsecure());    
     
     console.log("In upload server");
-    const fileBytes = [];
+    // const fileBytes = [];
     var dict = {};
     await call.on('data',async function(byteStream){
         let fileName = byteStream.filename;
-        let bytesInput = byteStream.payload;
+        let bytesInput =  Buffer.from(byteStream.payload);
        
         if(bytesInput.length==0){
             console.log("Write into file");
             try{
                 // fs.writeFile("C:/Users/Checkout/Documents/GRPC-JAVASCRIPT/testing.pdf", new Buffer(fileBytes[fileName]));
-                var buffer = Buffer.from(fileBytes[fileName]);
+                // var buffer = Buffer.from(dict[fileName]);
 
                 await new Promise((resolve,reject) => {
-                    fs.writeFile("/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/" + fileName, buffer,function(err, result) {
+                    fs.writeFile("/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/" + fileName, dict[fileName],function(err, result) {
                         if(err) {console.log('error', err); reject(err);}
                         console.log("File saved successfully");
                         resolve(result);
@@ -160,11 +160,11 @@ async function UploadFile(call, callback) {
         else{
             if(!(fileName in dict))
             {
-                fileBytes[fileName] = bytesInput;
+                dict[fileName] = bytesInput;
             }
             else
             {
-                fileBytes[fileName] = fileBytes[fileName] + bytesInput;
+                dict[fileName] = dict[fileName] + bytesInput;
                 console.log("Bye");
             }
         }
