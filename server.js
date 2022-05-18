@@ -1,6 +1,7 @@
 const PROTO_PATH = './proto/client-comm.proto';
 const PROTO_PATH_Node = './proto/node-comm.proto';
 const PROTO_PATH_GATEWAY = './proto/gateway-comm.proto';
+const PROTO_PATH_SENTINEL = './proto/sentinel-comm.proto';
 
 var ip = require("ip");
 var {redisClient} = require('./redisClient');
@@ -40,6 +41,16 @@ let packageDefinition_gateway = protoLoader.loadSync(
 });
 let gateway_comm_proto = grpc.loadPackageDefinition(packageDefinition_gateway).stream;
 
+let packageDefinition_sentinel = protoLoader.loadSync(
+  PROTO_PATH_SENTINEL,
+  {keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true
+});
+let sentinel_comm_proto = grpc.loadPackageDefinition(packageDefinition_sentinel);
+
 let { UploadFile } = require('./UploadFile.js');
 let { CreateReplica } = require('./CreateReplica.js');
 let { ReplicateFile } = require('./ReplicateFile.js');
@@ -56,6 +67,10 @@ async function main() {
   server.addService(node_comm_proto.stream.NodeReplication.service, 
     {CreateReplica: CreateReplica,
       ReplicateFile: ReplicateFile }
+  );
+
+  server.addService(sentinel_comm_proto.stream.SentinelMonitoring.service, 
+    { healthCheck: (call, callback) => {callback(null, {status: "SUCCESS"})} }
   );
   
   server.bind('0.0.0.0:4500', grpc.ServerCredentials.createInsecure());

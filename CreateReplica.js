@@ -15,7 +15,7 @@ function CreateReplica(call, callback) {
             try{
                 // fs.writeFile("C:/Users/Checkout/Documents/GRPC-JAVASCRIPT/testing.pdf", new Buffer(fileBytes[fileName]));
                 const buffer = Buffer.from(fileBytes[fileName]);
-                fs.writeFile("/Users/rohitsikrewal/Desktop/sample123.pdf", buffer,function(err, result) {
+                fs.writeFile("/Users/rohitsikrewal/Desktop/sample225.pdf", buffer,function(err, result) {
                     if(err) console.log('error', err);
                   });
             }
