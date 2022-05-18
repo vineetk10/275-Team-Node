@@ -125,7 +125,7 @@ async function UploadFile(call, callback) {
                 
                 console.log("Hi "+nodeIpsToReplicate.length);
             
-            let successips =  await abcd(nodeIpsToReplicate, fileName,  buffer)
+            let successips =  await abcd(nodeIpsToReplicate, fileName,  newBuffer)
             .then((res) => {
                 console.log("then--->", res)
                 return res.successips})
