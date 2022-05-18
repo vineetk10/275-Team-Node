@@ -1,3 +1,4 @@
+require('dotenv').config();
 const PROTO_PATH = './proto/client-comm.proto';
 const PROTO_PATH_Node = './proto/node-comm.proto';
 const PROTO_PATH_GATEWAY = './proto/gateway-comm.proto';

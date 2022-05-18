@@ -1,4 +1,4 @@
-const PROTO_PATH = './proto/master-comm.proto';
+const PROTO_PATH = '../proto/master-comm.proto';
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 
@@ -14,7 +14,7 @@ let packageDefinition = protoLoader.loadSync(
   });
 let master_comm_proto = grpc.loadPackageDefinition(packageDefinition)
 
-let { GetNodeIpsForReplication } = require('./GetNodeIpsForReplication.js');
+let { GetNodeIpsForReplication } = require('../GetNodeIpsForReplication.js');
 
 function main() {
   let server = new grpc.Server();

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const fs = require('fs');
 const util = require('util')
 const PROTO_PATH1 = './proto/master-comm.proto';
@@ -84,7 +85,9 @@ async function UploadFile(call, callback) {
         console.log("login function");
     }
 
-    let client1 = new master_comm_proto.Replication('localhost:4502',
+    var masterip = await redisClient.get("masterip");
+
+    let client1 = new master_comm_proto.Replication(masterip,
   grpc.credentials.createInsecure());    
     
     console.log("In upload server");
@@ -98,7 +101,7 @@ async function UploadFile(call, callback) {
                 
                 var newBuffer = Buffer.concat(dict[fileName]);
                 await new Promise((resolve,reject) => {
-                    fs.writeFile("/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/testing.pdf",newBuffer,function(err, result) {
+                    fs.writeFile(process.env.LOCAL_PATH + fileName,newBuffer,function(err, result) {
                         if(err) {console.log('error', err); reject(err);}
                         console.log("File saved successfully");
                         resolve(result);

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const PROTO_PATH = '../proto/client-comm.proto';
 
 const grpc = require('grpc');
@@ -17,7 +18,7 @@ let packageDefinition = protoLoader.loadSync(
 let client_comm_proto = grpc.loadPackageDefinition(packageDefinition).client;
 
 function main() {
-  let client = new client_comm_proto.Streaming('localhost:4500',
+  let client = new client_comm_proto.Streaming(process.env.CLIENT_IP,
                                         grpc.credentials.createInsecure());
     
     let call = client.DownloadFile({filename: "sample.pdf"});

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const fs = require('fs');
 const util = require('util')
 splitSync = require('node-split').splitSync;
@@ -18,7 +19,7 @@ async function DownloadFile(call) {
         console.log("login function");
     }
 
-    var filePath = "/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/";
+    var filePath = process.env.LOCAL_PATH;
     var data = fs.readFileSync(filePath + call.request.filename);
 
     var buffArr = splitSync(data, {

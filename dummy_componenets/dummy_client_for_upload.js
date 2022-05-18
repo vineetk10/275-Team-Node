@@ -1,6 +1,6 @@
-const PROTO_PATH = './proto/client-comm.proto';
-const PROTO_PATH1 = './proto/master-comm.proto';
-const PROTO_PATH_Node = './proto/node-comm.proto';
+const PROTO_PATH = '../proto/client-comm.proto';
+const PROTO_PATH1 = '../proto/master-comm.proto';
+const PROTO_PATH_Node = '../proto/node-comm.proto';
 
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
