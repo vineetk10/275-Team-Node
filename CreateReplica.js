@@ -8,14 +8,13 @@ function CreateReplica(call, callback) {
     var dict = {};
     call.on('data',function(byteStream){
         let fileName = byteStream.filename;
-        let bytesInput = byteStream.payload;
+        let bytesInput = Buffer.from(byteStream.payload);
        
         if(bytesInput.length==0){
             console.log("Write into file");
             try{
-                // fs.writeFile("C:/Users/Checkout/Documents/GRPC-JAVASCRIPT/testing.pdf", new Buffer(fileBytes[fileName]));
-                const buffer = Buffer.from(fileBytes[fileName]);
-                fs.writeFile("/Users/rohitsikrewal/Desktop/sample225.pdf", buffer,function(err, result) {
+                var newBuffer = Buffer.concat(dict[fileName]);
+                fs.writeFile("/Users/rohitsikrewal/Desktop/"+fileName, newBuffer,function(err, result) {
                     if(err) console.log('error', err);
                   });
             }
@@ -27,12 +26,12 @@ function CreateReplica(call, callback) {
         else{
             if(!(fileName in dict))
             {
-                fileBytes[fileName] = bytesInput;
+                dict[fileName] = [bytesInput];
             }
             else
             {
-                fileBytes[fileName] = fileBytes[fileName] + bytesInput;
-                console.log("Bye");
+                let val = dict[fileName];
+                val.push(bytesInput);
             }
         }
        

@@ -98,7 +98,7 @@ async function UploadFile(call, callback) {
                 
                 var newBuffer = Buffer.concat(dict[fileName]);
                 await new Promise((resolve,reject) => {
-                    fs.writeFile("C:/Users/Checkout/Documents/testing.pdf",newBuffer,function(err, result) {
+                    fs.writeFile("C:/Users/Checkout/Documents/"+fileName,newBuffer,function(err, result) {
                         if(err) {console.log('error', err); reject(err);}
                         console.log("File saved successfully");
                         resolve(result);
