@@ -48,11 +48,11 @@ function main() {
                                         grpc.credentials.createInsecure());
 
   var buffer = new Buffer.alloc(1024);
-  let filePath = "/Users/rohitsikrewal/Documents/sample.pdf";
+  let filePath = "C:/Users/Checkout/Downloads/sample.pdf";
   //let filePath = "C:/Users/alism/Desktop/Node/File/sample.pdf";
 
   try {
-    let chunkSize = 4000;
+    let chunkSize = 100;
     const data = fs.readFileSync(filePath);
     let call = client.UploadFile(function (error, response) {
       console.log(response);
