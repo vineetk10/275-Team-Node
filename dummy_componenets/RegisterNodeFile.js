@@ -1,6 +1,6 @@
 function RegisterNodeFile(call, callback) {
     
-    console.log("--->",call);
+    console.log("--->",call)
     callback(null, {
         masterip: "masterIP:4000",
         message: "SUCCESS",

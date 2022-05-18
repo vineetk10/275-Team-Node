@@ -1,3 +1,4 @@
+require('dotenv').config();
 const PROTO_PATH_GATEWAY = './proto/gateway-comm.proto';
 
 const grpc = require('grpc');
@@ -21,7 +22,7 @@ let gateway_comm_proto = grpc.loadPackageDefinition(packageDefinition_gateway).s
                                          
 function main() {
 
-    let registrationClient = new gateway_comm_proto.Authenticate('localhost:3000',
+    let registrationClient = new gateway_comm_proto.Authenticate(process.env.GATEWAY_IP,
                                          grpc.credentials.createInsecure());
 
     var ipa = ip.address(); //our ip
@@ -29,8 +30,8 @@ function main() {
     // client_ip is ip of application client or this client ?
     var creds = {
       ip: ipa,
-      password : "cmpe275",
-      type: "NODE"
+      password : process.env.CRED_PASSWORD,
+      type: process.env.CRED_TYPE
     }
 
     registrationClient.Login(creds, (error, response) => {

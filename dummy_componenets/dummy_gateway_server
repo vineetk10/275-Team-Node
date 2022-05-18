@@ -1,4 +1,4 @@
-const PROTO_PATH_GATEWAY = './proto/gateway-comm.proto';
+const PROTO_PATH_GATEWAY = '../proto/gateway-comm.proto';
 
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
@@ -23,8 +23,9 @@ function main() {
             Register: RegisterNodeFile,
             
             Login: (call, callback) => {
+              console.log(call);
               callback(null, {masterip: "localhost:4502",
-              message: "SUCCESS",
+              message: "ERROR",
               token: "12"})
             },
             ValidateToken: (call, callback) => {
