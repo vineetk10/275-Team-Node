@@ -57,8 +57,8 @@ function main() {
       console.log(response);
     });
    
-      call.write({filename: "sample", payload:data});
-      call.write({filename: "sample", payload:''});
+      call.write({filename: "sample.pdf", payload:data});
+      call.write({filename: "sample.pdf", payload:''});
       call.end();
 
   } catch (err) {

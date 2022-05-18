@@ -8,20 +8,20 @@ package stream;
 
 service Replication {
   // Methods required for Gateway
-//   rpc NewNodeUpdate(NewNodeUpdateRequest) returns (StatusResponse) {}
-//   rpc GetNodeForDownload(GetNodeForDownloadRequest) returns (GetNodeForDownloadResponse) {}
-//   rpc GetNodeForUpload(GetNodeForUploadRequest) returns (GetNodeForUploadResponse) {}
+  rpc NewNodeUpdate(NewNodeUpdateRequest) returns (NewNodeUpdateResponse) {}
+  rpc GetNodeForDownload(GetNodeForDownloadRequest) returns (GetNodeForDownloadResponse) {}
+  rpc GetNodeForUpload(GetNodeForUploadRequest) returns (GetNodeForUploadResponse) {}
 
-//   // Methods required for Sentinel
-//   rpc NodeDownUpdate(NodeDownUpdateRequest) returns (StatusResponse) {}
-//   rpc GetListOfNodes(GetListOfNodesRequest) returns (GetListOfNodesResponse) {}
+  // Methods required for Sentinel
+  rpc NodeDownUpdate(NodeDownUpdateRequest) returns (NodeDownUpdateResponse) {}
+  rpc GetListOfNodes(GetListOfNodesRequest) returns (GetListOfNodesResponse) {}
 
   // Methods required for Node
   rpc GetNodeIpsForReplication (NodeIpsRequest) returns (NodeIpsReply) {}
-//   rpc UpdateReplicationStatus (ReplicationDetailsRequest) returns (ReplicationDetailsResponse) {}
+  rpc UpdateReplicationStatus (ReplicationDetailsRequest) returns (ReplicationDetailsResponse) {}
 
   // Methods required for CLI
-//   rpc GetListOfFiles (GetListOfFilesRequest) returns (GetListOfFilesResponse) {}
+  rpc GetListOfFiles (GetListOfFilesRequest) returns (GetListOfFilesResponse) {}
 }
 
 enum Status {
@@ -57,6 +57,12 @@ message NewNodeUpdateRequest {
   string newnodeip = 1;
 }
 
+// The response message containing status message of either "SUCCESS" or "FAILURE"
+message NewNodeUpdateResponse {
+  string status = 1;
+}
+
+// NOT BEING USED ANYMORE
 // The response message containing the generic status of an incoming request
 message StatusResponse {
   Status status = 1;
@@ -81,6 +87,11 @@ message GetNodeForUploadResponse {
 
 message NodeDownUpdateRequest {
   string nodeip = 1;
+}
+
+// status will contain either "SUCCESS" or "FAILURE"
+message NodeDownUpdateResponse {
+  string status = 1;
 }
 
 message GetListOfFilesRequest {

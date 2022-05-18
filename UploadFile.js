@@ -6,6 +6,8 @@ const protoLoader = require('@grpc/proto-loader');
 const _ = require('lodash');
 const PROTO_PATH_Node = './proto/node-comm.proto';
 
+var {redisClient} = require('./redisClient');
+
 
 let packageDefinition_node = protoLoader.loadSync(
     PROTO_PATH_Node,
@@ -31,6 +33,42 @@ let packageDefinition1 = protoLoader.loadSync(
     });
 
 let master_comm_proto = grpc.loadPackageDefinition(packageDefinition1).stream;
+
+async function abcd(nodeIpsToReplicate, fileName, buffer) {
+    return await new Promise((resolve, reject) => {
+        let successips = [];
+
+        nodeIpsToReplicate.forEach(nodeip => {
+            try {
+                let client_node = new node_comm_proto.NodeReplication(nodeip,
+                                grpc.credentials.createInsecure());
+                // const data = fs.readFileSync(filePath);
+
+                
+                let call =  client_node.CreateReplica(function (error, response) {
+                if (response.status == "SUCCESS") {
+                    console.log("rohit--->", nodeip)
+                    successips.push(nodeip);
+                    console.log("rohit--->", successips)
+                }
+                console.log("----->", response);
+                });
+                call.write({filename: fileName, payload:buffer});
+                call.write({filename: fileName, payload:''});
+                call.end();
+                
+
+            } catch (error) {
+                reject(error);
+            }
+        
+        });
+        
+        // resolve({successips: successips});
+        resolve({successips: nodeIpsToReplicate});
+
+    })
+}
 
 
 async function UploadFile(call, callback) {
@@ -63,7 +101,7 @@ async function UploadFile(call, callback) {
                 var buffer = Buffer.from(fileBytes[fileName]);
 
                 await new Promise((resolve,reject) => {
-                    fs.writeFile("/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/sample225.pdf", buffer,function(err, result) {
+                    fs.writeFile("/Users/rohitsikrewal/Documents/GRPC-JAVASCRIPT/" + fileName, buffer,function(err, result) {
                         if(err) {console.log('error', err); reject(err);}
                         console.log("File saved successfully");
                         resolve(result);
@@ -89,22 +127,29 @@ async function UploadFile(call, callback) {
                 })
                 
                 console.log("Hi "+nodeIpsToReplicate.length);
-                
-                nodeIpsToReplicate.forEach(nodeip => {
-                    try {
-                        let client_node = new node_comm_proto.NodeReplication(nodeip,
-                                        grpc.credentials.createInsecure());
-                        // const data = fs.readFileSync(filePath);
-                        let call = client_node.CreateReplica(function (error, response) {
-                          console.log(response);
-                        });
-                        call.write({filename: "testing", payload:buffer});
-                        call.write({filename: "testing", payload:''});
-                        call.end();
-                      } catch (err) {
-                        console.error(err);
-                      }
-                });
+            
+            let successips =  await abcd(nodeIpsToReplicate, fileName,  buffer)
+            .then((res) => {
+                console.log("then--->", res)
+                return res.successips})
+            .catch((error) => console.log("error==>",error));
+            
+            console.log("nodeips--->", successips);
+
+            let masterip = await redisClient.get('masterip')
+
+            let master_node_client = new master_comm_proto.Replication(masterip, grpc.credentials.createInsecure());
+
+            let ReplicationDetailsRequest ={
+                filename: fileName,
+                nodeips: successips
+            }
+
+            console.log("req body++++++", ReplicationDetailsRequest)
+
+            let update_replication_call = master_node_client.UpdateReplicationStatus(ReplicationDetailsRequest, function (error, response) {
+                console.log("res status======", response.status);
+            });
                 
             }
             catch(err)

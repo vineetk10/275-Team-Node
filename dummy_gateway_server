@@ -23,7 +23,7 @@ function main() {
             Register: RegisterNodeFile,
             
             Login: (call, callback) => {
-              callback(null, {masterip: "masterIP:3000",
+              callback(null, {masterip: "localhost:4502",
               message: "SUCCESS",
               token: "12"})
             },

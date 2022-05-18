@@ -21,7 +21,7 @@ let gateway_comm_proto = grpc.loadPackageDefinition(packageDefinition_gateway).s
                                          
 function main() {
 
-    let registrationClient = new gateway_comm_proto.Authenticate('localhost:4500',
+    let registrationClient = new gateway_comm_proto.Authenticate('localhost:3000',
                                          grpc.credentials.createInsecure());
 
     var ipa = ip.address(); //our ip

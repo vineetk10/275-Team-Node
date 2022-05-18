@@ -19,7 +19,10 @@ let { GetNodeIpsForReplication } = require('./GetNodeIpsForReplication.js');
 function main() {
   let server = new grpc.Server();
   server.addService(master_comm_proto.stream.Replication.service, 
-    {GetNodeIpsForReplication: GetNodeIpsForReplication }
+    {GetNodeIpsForReplication: GetNodeIpsForReplication,
+      UpdateReplicationStatus: (call, callback) => {
+        callback(null, {status: "SUCCESS"})
+      } }
   );
   server.bind('0.0.0.0:4502', grpc.ServerCredentials.createInsecure());
   server.start();
